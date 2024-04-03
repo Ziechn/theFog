@@ -1,4 +1,4 @@
-package com.techelevator;
+package com.techelevator.vehicles;
 
 public abstract class Vehicle {
     private String name;

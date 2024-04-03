@@ -1,5 +1,7 @@
 package com.techelevator;
 
+import com.techelevator.vehicles.Car;
+import com.techelevator.vehicles.Vehicle;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -1,4 +1,4 @@
-package com.techelevator;
+package com.techelevator.vehicles;
 
 public class Car extends Vehicle{
     public Car() {

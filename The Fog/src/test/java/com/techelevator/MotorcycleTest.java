@@ -1,6 +1,7 @@
 package com.techelevator;
 
-import org.junit.Before;
+import com.techelevator.vehicles.Motorcycle;
+import com.techelevator.vehicles.Vehicle;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
