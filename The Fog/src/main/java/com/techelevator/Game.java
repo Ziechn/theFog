@@ -10,6 +10,8 @@ import java.util.Scanner;
 public class Game {
 
     private Scanner userInput = new Scanner(System.in);
+    private int xPosition = 0;
+    private int yPosition = 0;
     public static void main(String[] args) {
 
         System.out.println("\nWelcome to The Fog\n");
@@ -99,8 +101,7 @@ public class Game {
 
     private void map(Vehicle vehicle){
 
-        int xPosition = 0;
-        int yPosition = 0;
+        Map map = new Map();
 
         System.out.println("Survive");
 
@@ -108,11 +109,20 @@ public class Game {
 
         while (mapSelection) {
             System.out.println("Fuel level: " + vehicle.getFuelLevel());
+
+            if (vehicle.getFuelLevel() <= 0) {
+                System.out.println("You have run out of fuel... Game over.");
+                int distanceTraveled = map.getListSize();
+                System.out.println("You traveled a distance of " + distanceTraveled + ".\n");
+                break;
+            }
+
             System.out.println("Choose a direction to travel:");
             System.out.println("n. North");
             System.out.println("s. South");
             System.out.println("e. East");
             System.out.println("w. West");
+            System.out.println("m. Map");
             System.out.println("q. Quit");
 
             String directionChoice = userInput.nextLine();
@@ -120,23 +130,26 @@ public class Game {
             if (directionChoice.equals("n") || directionChoice.equals("N")) {
                 // Move (add) 1 space in the y direction...
                 System.out.println("You drive north...");
-                yPosition++;
-                System.out.println("Location: " + xPosition + ", " + yPosition);
+                int yPositionNew = yPosition++;
+                move(vehicle,map,yPositionNew,xPosition);
             } else if (directionChoice.equals("s") || directionChoice.equals("S")) {
                 // Move (subtract) 1 space in the y direction...
                 System.out.println("You drive south...");
-                yPosition--;
-                System.out.println("Location: " + xPosition + ", " + yPosition);
+                int yPositionNew = yPosition--;
+                move(vehicle,map,yPositionNew,xPosition);
             } else if (directionChoice.equals("e") || directionChoice.equals("E")) {
                 // Move (add) 1 space in the x direction...
                 System.out.println("You drive east...");
-                xPosition++;
-                System.out.println("Location: " + xPosition + ", " + yPosition);
+                int xPositionNew = xPosition++;
+                move(vehicle,map,yPosition,xPositionNew);
             } else if (directionChoice.equals("w") || directionChoice.equals("W")) {
                 // Move (subtract) 1 space in the x direction...
                 System.out.println("You drive west...");
-                xPosition--;
-                System.out.println("Location: " + xPosition + ", " + yPosition);
+                int xPositionNew = xPosition--;
+                move(vehicle,map,yPosition,xPositionNew);
+            } else if (directionChoice.equals("m") || directionChoice.equals("M")) {
+                // Print the map list...
+                map.printList();
             } else if (directionChoice.equals("q") || directionChoice.equals("Q")) {
                 // Return to the main menu...
                 mapSelection = false;
@@ -147,9 +160,52 @@ public class Game {
         }
     }
 
-    private void move(int xDirection, int yDirection){
-        // Do all the things with moving the vehicle...
-        // May need a player class to record the score and the coordinate list.
+    private void move(Vehicle vehicle, Map map,int yPosition, int xPosition){
+        // Update the vehicle...
+        vehicle.setFuelLevel(1);
+
+        // Did we find a pickup?
+        int rng = (int)(Math.random() * 100);
+        if (rng < 40) {
+            System.out.println("There's nothing here.\n");
+        } else if (rng >= 40 && rng < 60){
+            System.out.println("Oh no! A zombie! Run away! You are forced to move one more place!\n");
+            vehicle.setFuelLevel(1);
+
+            if (yPosition > this.yPosition) {
+                // Moved north...
+                yPosition--;
+            } else if (yPosition < this.yPosition) {
+                // Moved south...
+                yPosition++;
+            } else if (xPosition > this.xPosition) {
+                // Moved east...
+                xPosition--;
+            } else if (xPosition < this.xPosition) {
+                // Moved west...
+                xPosition++;
+            } else {
+                // Didn't move?
+            }
+
+        } else if (rng >= 60 && rng < 85) {
+            System.out.println("Your found a small gas can. Fuel has been replenished by 1 point!\n");
+            vehicle.addFuel(1);
+        } else if (rng >= 85 && rng < 95) {
+            System.out.println("You found a medium gas can. Fuel has been replenished by 2 points!\n");
+            vehicle.addFuel(2);
+        } else if (rng >= 95) {
+            System.out.println("You found a large gas can! Fuel has been replenished by 3 points!\n");
+            vehicle.addFuel(3);
+        } else {
+            System.out.println("How did we get here?\n");
+        }
+
+        // Add to the Map...
+        map.addCoordinates(yPosition,xPosition);
+
+        // Tell them where they are...
+        System.out.println("Location: " + yPosition + ", " + xPosition);
     }
 
     private void quitMenu(){

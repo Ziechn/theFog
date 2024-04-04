@@ -42,6 +42,9 @@ public abstract class Vehicle {
     public void setFuelLevel(int distance) {
         float fuelCost = (float)distance / fuelEfficiency;
         this.fuelLevel -= fuelCost;
+        if (this.fuelLevel <= 0) {
+            this.fuelLevel = 0;
+        }
     }
 
     public void addFuel(int fuel) {
