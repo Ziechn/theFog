@@ -1,5 +1,9 @@
 package com.techelevator;
 
+import com.techelevator.event.GasCanLarge;
+import com.techelevator.event.GasCanMedium;
+import com.techelevator.event.GasCanSmall;
+import com.techelevator.event.Pickup;
 import com.techelevator.vehicles.Car;
 import com.techelevator.vehicles.Motorcycle;
 import com.techelevator.vehicles.Truck;
@@ -189,14 +193,21 @@ public class Game {
             }
 
         } else if (rng >= 60 && rng < 85) {
-            System.out.println("Your found a small gas can. Fuel has been replenished by 1 point!\n");
-            vehicle.addFuel(1);
+            int[] location = {xPosition, yPosition};
+            GasCanSmall smallGasCan = new GasCanSmall(location);
+            System.out.println("You found a " + smallGasCan.getName() + "! Fuel has been replenished by " + smallGasCan.getFuelAmount() + " point!\n");
+            smallGasCan.hasBeenTriggered();
+            vehicle.addFuel(smallGasCan.getFuelAmount());
         } else if (rng >= 85 && rng < 95) {
-            System.out.println("You found a medium gas can. Fuel has been replenished by 2 points!\n");
+            int[] location = {xPosition, yPosition};
+            GasCanMedium mediumGasCan = new GasCanMedium(location);
+            System.out.println("You found a " + mediumGasCan.getName() + "! Fuel has been replenished by " + mediumGasCan.getFuelAmount() + " point!\n");
             vehicle.addFuel(2);
         } else if (rng >= 95) {
-            System.out.println("You found a large gas can! Fuel has been replenished by 3 points!\n");
-            vehicle.addFuel(3);
+            int[] location = {xPosition, yPosition};
+            GasCanLarge largeGasCan = new GasCanLarge(location);
+            System.out.println("You found a " + largeGasCan.getName() + "! Fuel has been replenished by " + largeGasCan.getFuelAmount() + " point!\n");
+            vehicle.addFuel(2);
         } else {
             System.out.println("How did we get here?\n");
         }
